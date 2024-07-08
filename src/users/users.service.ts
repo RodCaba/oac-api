@@ -19,4 +19,8 @@ export class UsersService {
   findOne(id: ObjectId): Promise<User | null> {
     return this.userModel.findById(id).exec();
   }
+
+  findByEmail(email: string): Promise<User | null> {
+    return this.userModel.findOne({ email }).exec();
+  }
 }
