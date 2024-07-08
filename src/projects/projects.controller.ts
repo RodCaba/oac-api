@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Param, Post, UseFilters } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseFilters,
+  UseGuards,
+} from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { MongoExceptionFilter } from 'src/utils/mongo-exception.filter';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { Project } from './schemas/project.schema';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('projects')
 export class ProjectsController {
   constructor(private projectsService: ProjectsService) {}
