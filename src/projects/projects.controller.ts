@@ -11,9 +11,9 @@ import { ProjectsService } from './projects.service';
 import { MongoExceptionFilter } from 'src/utils/mongo-exception.filter';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { Project } from './schemas/project.schema';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(JwtGuard)
 @Controller('projects')
 export class ProjectsController {
   constructor(private projectsService: ProjectsService) {}
