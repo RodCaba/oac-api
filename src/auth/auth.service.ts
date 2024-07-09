@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { SignupResponseDto } from 'src/auth/dto/signup.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
+import { Roles } from './enums/roles';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,7 @@ export class AuthService {
 
   async signUp(payload: CreateUserDto): Promise<SignupResponseDto | null> {
     const hashedPassword = await bcrypt.hash(payload.password, this.saltRounds);
-    const data = { ...payload, password: hashedPassword };
+    const data = { ...payload, password: hashedPassword, roles: [Roles.ADMIN] };
     const user = await this.usersService.create(data);
 
     return {
@@ -39,7 +40,7 @@ export class AuthService {
 
     if (!isPasswordMatch) return null;
 
-    const payload = { sub: user._id, email: user.email };
+    const payload = { sub: user._id, email: user.email, roles: user.roles };
 
     return await this.jwtService.signAsync(payload);
   }
