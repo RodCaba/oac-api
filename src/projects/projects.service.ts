@@ -11,13 +11,26 @@ export class ProjectsService {
     private projectModel: Model<Project>,
   ) {}
 
-  create(createProjectDto: CreateProjectDto): Promise<Project> {
-    const createdProject = new this.projectModel(createProjectDto);
+  create(
+    createProjectDto: CreateProjectDto,
+    ownerId: string,
+  ): Promise<Project> {
+    const createdProject = new this.projectModel({
+      ...createProjectDto,
+      owner: ownerId,
+      members: createProjectDto.members
+        ? [...createProjectDto.members, ownerId]
+        : [ownerId],
+    });
     return createdProject.save();
   }
 
   findOne(id: string): Promise<Project | null> {
     return this.projectModel.findById(id).exec();
+  }
+
+  findAssignedProjects(assignedUserId: string): Promise<Project[]> {
+    return this.projectModel.find({ members: assignedUserId }).exec();
   }
 
   findProjectsByOwner(ownerId: string): Promise<Project[]> {

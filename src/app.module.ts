@@ -8,6 +8,7 @@ import { ProjectsModule } from './projects/projects.module';
 import { AuthModule } from './auth/auth.module';
 import { AccessControlModule } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac-policy';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { RBAC_POLICY } from './auth/rbac-policy';
     UsersModule,
     ProjectsModule,
     AuthModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,6 +16,7 @@ import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { Request } from 'express';
 import { SessionDto } from 'src/auth/dto/session.dto';
 import { ACGuard, UseRoles } from 'nest-access-control';
+import { Roles } from 'src/auth/enums/roles';
 
 @UseGuards(JwtGuard, ACGuard)
 @Controller('projects')
@@ -29,18 +30,37 @@ export class ProjectsController {
   })
   @Post()
   @UseFilters(MongoExceptionFilter)
-  async create(@Body() project: CreateProjectDto): Promise<Project> {
-    return await this.projectsService.create(project);
+  async create(
+    @Body() project: CreateProjectDto,
+    @Req() req: Request,
+  ): Promise<Project> {
+    const requestUser = req.user as SessionDto;
+    return await this.projectsService.create(project, requestUser.id);
   }
 
+  @UseRoles({
+    resource: 'projects',
+    action: 'read',
+    possession: 'own',
+  })
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Project | null> {
     return await this.projectsService.findOne(id);
   }
 
+  @UseRoles({
+    resource: 'projects',
+    action: 'read',
+    possession: 'own',
+  })
   @Get()
-  async findProjectsByOwner(@Req() req: Request): Promise<Project[]> {
+  async findAll(@Req() req: Request): Promise<Project[]> {
     const requestUser = req.user as SessionDto;
-    return await this.projectsService.findProjectsByOwner(requestUser.id);
+
+    if (requestUser.roles.includes(Roles.ADMIN)) {
+      return await this.projectsService.findProjectsByOwner(requestUser.id);
+    }
+
+    return await this.projectsService.findAssignedProjects(requestUser.id);
   }
 }
