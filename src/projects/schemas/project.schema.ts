@@ -12,9 +12,6 @@ export class Project {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: User;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-  members: User[];
-
   @Prop({ default: Date.now })
   createdAt: Date;
 

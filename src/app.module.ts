@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { AccessControlModule } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac-policy';
 import { TasksModule } from './tasks/tasks.module';
+import { ProjectGetMiddleware } from './middleware/project-get.middleware';
 
 @Module({
   imports: [
@@ -35,4 +36,8 @@ import { TasksModule } from './tasks/tasks.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ProjectGetMiddleware).forRoutes('projects/:id');
+  }
+}

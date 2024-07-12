@@ -17,6 +17,7 @@ import { Request } from 'express';
 import { SessionDto } from 'src/auth/dto/session.dto';
 import { ACGuard, UseRoles } from 'nest-access-control';
 import { Roles } from 'src/auth/enums/roles';
+import { ProjectMemberGuard } from './guards/project-member.guard';
 
 @UseGuards(JwtGuard, ACGuard)
 @Controller('projects')
@@ -43,6 +44,7 @@ export class ProjectsController {
     action: 'read',
     possession: 'own',
   })
+  @UseGuards(ProjectMemberGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Project | null> {
     return await this.projectsService.findOne(id);
