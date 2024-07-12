@@ -15,7 +15,6 @@ export class ProjectMemberGuard implements CanActivate {
           return true;
         }
       });
-
     return isMember;
   }
 }

@@ -44,12 +44,26 @@ export class ProjectsService {
     return this.projectModel.findById(id).exec();
   }
 
-  findAssignedProjects(assignedUserId: string): Promise<Project[]> {
-    return this.projectModel.find({ members: assignedUserId }).exec();
+  async findAssignedProjects(assignedUserId: string): Promise<Project[]> {
+    const projectMembers = await this.projectMemberModel.find({
+      user: assignedUserId,
+    });
+    const projects = projectMembers.map(async (member) => {
+      return await this.projectModel.findById(member.project).exec();
+    });
+
+    return Promise.all(projects);
   }
 
   findProjectsByOwner(ownerId: string): Promise<Project[]> {
     return this.projectModel.find({ owner: ownerId }).exec();
+  }
+
+  addMember(projectId: string, userId: string): Promise<ProjectMember> {
+    return new this.projectMemberModel({
+      user: userId,
+      project: projectId,
+    }).save();
   }
 
   async isMember(userId: string, projectId: string): Promise<boolean> {

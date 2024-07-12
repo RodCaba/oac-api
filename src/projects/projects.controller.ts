@@ -65,4 +65,15 @@ export class ProjectsController {
 
     return await this.projectsService.findAssignedProjects(requestUser.id);
   }
+
+  @UseRoles({
+    resource: 'projects',
+    action: 'update',
+    possession: 'own',
+  })
+  @UseGuards(ProjectMemberGuard)
+  @Post(':id/members')
+  async addMember(@Param('id') id: string, @Body() member: { userId: string }) {
+    return await this.projectsService.addMember(id, member.userId);
+  }
 }

@@ -9,7 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { AccessControlModule } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac-policy';
 import { TasksModule } from './tasks/tasks.module';
-import { ProjectGetMiddleware } from './middleware/project-get.middleware';
+import { ProjectParamMiddleware } from './middleware/project-param.middleware';
 
 @Module({
   imports: [
@@ -38,6 +38,6 @@ import { ProjectGetMiddleware } from './middleware/project-get.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ProjectGetMiddleware).forRoutes('projects/:id');
+    consumer.apply(ProjectParamMiddleware).forRoutes('projects/:id');
   }
 }
