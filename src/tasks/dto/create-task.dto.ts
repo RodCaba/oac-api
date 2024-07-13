@@ -1,4 +1,4 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Status } from '../enums/status';
 
 export class CreateTaskDto {
@@ -10,6 +10,7 @@ export class CreateTaskDto {
 
   @IsString()
   @IsEnum([Status.OPEN, Status.IN_PROGRESS, Status.DONE])
+  @IsOptional()
   status: string;
 
   @IsString()

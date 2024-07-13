@@ -16,6 +16,7 @@ import { TasksService } from './tasks.service';
 import { SessionDto } from 'src/auth/dto/session.dto';
 import { Request } from 'express';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { ProjectMemberGuard } from 'src/projects/guards/project-member.guard';
 
 @UseGuards(JwtGuard, ACGuard)
 @Controller('tasks')
@@ -27,6 +28,7 @@ export class TasksController {
     action: 'create',
     possession: 'any',
   })
+  @UseGuards(ProjectMemberGuard)
   @Post()
   async create(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     return await this.tasksService.create(createTaskDto);
@@ -71,6 +73,7 @@ export class TasksController {
     action: 'read',
     possession: 'any',
   })
+  @UseGuards(ProjectMemberGuard)
   @Get('/project/:projectId')
   async findTasksByProject(
     @Param('projectId') projectId: string,

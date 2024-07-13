@@ -25,11 +25,7 @@ export class Task {
   })
   status: string;
 
-  @Prop({
-    type: [
-      { type: mongoose.Schema.Types.ObjectId, ref: 'Project', index: true },
-    ],
-  })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Project', index: true })
   project: Project;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', index: true })

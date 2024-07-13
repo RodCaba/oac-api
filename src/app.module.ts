@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -39,5 +44,12 @@ import { ProjectParamMiddleware } from './middleware/project-param.middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(ProjectParamMiddleware).forRoutes('projects/:projectId');
+    consumer
+      .apply(ProjectParamMiddleware)
+      .forRoutes({ path: 'tasks/', method: RequestMethod.POST });
+
+    consumer
+      .apply(ProjectParamMiddleware)
+      .forRoutes('tasks/project/:projectId');
   }
 }
