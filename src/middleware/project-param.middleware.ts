@@ -4,9 +4,13 @@ import { NextFunction, Request, Response } from 'express';
 @Injectable()
 export class ProjectParamMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    const requestProjectId = req.params.id;
+    const requestProjectId =
+      req.body.project || req.params.projectId || undefined;
 
-    req.headers['project-id'] = requestProjectId;
+    if (requestProjectId) {
+      req.headers['project-id'] = requestProjectId;
+    }
+
     next();
   }
 }

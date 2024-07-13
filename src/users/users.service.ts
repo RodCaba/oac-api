@@ -23,4 +23,8 @@ export class UsersService {
   findByEmail(email: string): Promise<User | null> {
     return this.userModel.findOne({ email }).exec();
   }
+
+  findByEmailIncludePass(email: string): Promise<User | null> {
+    return this.userModel.findOne({ email }).select('+password').exec();
+  }
 }

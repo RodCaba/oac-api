@@ -38,6 +38,6 @@ import { ProjectParamMiddleware } from './middleware/project-param.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ProjectParamMiddleware).forRoutes('projects/:id');
+    consumer.apply(ProjectParamMiddleware).forRoutes('projects/:projectId');
   }
 }

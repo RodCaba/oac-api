@@ -7,15 +7,18 @@ import {
   ProjectMember,
   ProjectMemberSchema,
 } from './schemas/project-member.schema';
+import { UsersModule } from 'src/users/users.module';
+import { User, UserSchema } from 'src/users/schemas/user.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Project.name, schema: ProjectSchema },
       { name: ProjectMember.name, schema: ProjectMemberSchema },
+      { name: User.name, schema: UserSchema },
     ]),
   ],
   controllers: [ProjectsController],
-  providers: [ProjectsService],
+  providers: [ProjectsService, UsersModule],
 })
 export class ProjectsModule {}

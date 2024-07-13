@@ -18,6 +18,7 @@ import { SessionDto } from 'src/auth/dto/session.dto';
 import { ACGuard, UseRoles } from 'nest-access-control';
 import { Roles } from 'src/auth/enums/roles';
 import { ProjectMemberGuard } from './guards/project-member.guard';
+import { User } from 'src/users/schemas/user.schema';
 
 @UseGuards(JwtGuard, ACGuard)
 @Controller('projects')
@@ -45,8 +46,8 @@ export class ProjectsController {
     possession: 'own',
   })
   @UseGuards(ProjectMemberGuard)
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Project | null> {
+  @Get(':projectId')
+  async findOne(@Param('projectId') id: string): Promise<Project | null> {
     return await this.projectsService.findOne(id);
   }
 
@@ -66,14 +67,22 @@ export class ProjectsController {
     return await this.projectsService.findAssignedProjects(requestUser.id);
   }
 
+  @Get(':projectId/members')
+  async findMembers(@Param('projectId') id: string): Promise<User[]> {
+    return await this.projectsService.findMembers(id);
+  }
+
   @UseRoles({
     resource: 'projects',
     action: 'update',
     possession: 'own',
   })
   @UseGuards(ProjectMemberGuard)
-  @Post(':id/members')
-  async addMember(@Param('id') id: string, @Body() member: { userId: string }) {
+  @Post(':projectId/members')
+  async addMember(
+    @Param('projectId') id: string,
+    @Body() member: { userId: string },
+  ) {
     return await this.projectsService.addMember(id, member.userId);
   }
 }

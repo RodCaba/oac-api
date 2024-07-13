@@ -4,6 +4,7 @@ import { Project } from './schemas/project.schema';
 import { Model } from 'mongoose';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectMember } from './schemas/project-member.schema';
+import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class ProjectsService {
@@ -12,6 +13,8 @@ export class ProjectsService {
     private projectModel: Model<Project>,
     @InjectModel(ProjectMember.name)
     private projectMemberModel: Model<ProjectMember>,
+    @InjectModel(User.name)
+    private userModel: Model<User>,
   ) {}
 
   create(
@@ -64,6 +67,18 @@ export class ProjectsService {
       user: userId,
       project: projectId,
     }).save();
+  }
+
+  async findMembers(projectId: string): Promise<User[]> {
+    const members = await this.projectMemberModel.find({
+      project: projectId,
+    });
+
+    const projectMembers = members.map(async (member) => {
+      return await this.userModel.findById(member.user).exec();
+    });
+
+    return Promise.all(projectMembers);
   }
 
   async isMember(userId: string, projectId: string): Promise<boolean> {
