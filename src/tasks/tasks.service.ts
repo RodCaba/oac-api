@@ -15,7 +15,9 @@ export class TasksService {
   }
 
   update(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
-    return this.taskModel.findByIdAndUpdate(id, updateTaskDto).exec();
+    return this.taskModel
+      .findByIdAndUpdate(id, updateTaskDto, { new: true })
+      .exec();
   }
 
   findOne(id: string): Promise<Task | null> {
@@ -23,7 +25,10 @@ export class TasksService {
   }
 
   findAssignedTasks(assignedUserId: string): Promise<Task[]> {
-    return this.taskModel.find({ assignedUser: assignedUserId }).exec();
+    return this.taskModel
+      .find({ assignedUser: assignedUserId })
+      .sort({ dueDate: -1 })
+      .exec();
   }
 
   findTasksByProject(projectId: string): Promise<Task[]> {

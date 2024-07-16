@@ -39,9 +39,11 @@ export class TasksController {
     action: 'update',
     possession: 'own',
   })
-  @Patch(':id')
+  @UseGuards(ProjectMemberGuard)
+  @Patch(':taskId')
   async updateTask(
-    @Param('id') id: string,
+    @Req() req: Request,
+    @Param('taskId') id: string,
     @Body() updateTaskDto: UpdateTaskDto,
   ): Promise<Task> {
     return await this.tasksService.update(id, updateTaskDto);
@@ -63,8 +65,9 @@ export class TasksController {
     action: 'read',
     possession: 'own',
   })
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Task | null> {
+  @UseGuards(ProjectMemberGuard)
+  @Get(':taskId')
+  async findOne(@Param('taskId') id: string): Promise<Task | null> {
     return await this.tasksService.findOne(id);
   }
 

@@ -15,6 +15,7 @@ import { AccessControlModule } from 'nest-access-control';
 import { RBAC_POLICY } from './auth/rbac-policy';
 import { TasksModule } from './tasks/tasks.module';
 import { ProjectParamMiddleware } from './middleware/project-param.middleware';
+import { ProjectResourceMiddleware } from './middleware/project-resource.middleware';
 
 @Module({
   imports: [
@@ -46,10 +47,14 @@ export class AppModule implements NestModule {
     consumer.apply(ProjectParamMiddleware).forRoutes('projects/:projectId');
     consumer
       .apply(ProjectParamMiddleware)
-      .forRoutes({ path: 'tasks/', method: RequestMethod.POST });
+      .forRoutes(
+        { path: 'tasks/', method: RequestMethod.POST },
+        'tasks/project/:projectId',
+      );
 
     consumer
-      .apply(ProjectParamMiddleware)
-      .forRoutes('tasks/project/:projectId');
+      .apply(ProjectResourceMiddleware)
+      .exclude('tasks/project/:projectId')
+      .forRoutes('tasks/:taskId');
   }
 }

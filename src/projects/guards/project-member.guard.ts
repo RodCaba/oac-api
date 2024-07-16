@@ -6,7 +6,6 @@ export class ProjectMemberGuard implements CanActivate {
   constructor(private projectsService: ProjectsService) {}
   canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log(request.headers);
     const isMember = this.projectsService
       .isMember(request.user.id, request.headers['project-id'])
       .then((isMember) => {
