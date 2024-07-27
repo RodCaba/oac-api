@@ -16,6 +16,7 @@ import { RBAC_POLICY } from './auth/rbac-policy';
 import { TasksModule } from './tasks/tasks.module';
 import { ProjectParamMiddleware } from './middleware/project-param.middleware';
 import { ProjectResourceMiddleware } from './middleware/project-resource.middleware';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ProjectResourceMiddleware } from './middleware/project-resource.middlew
     ProjectsModule,
     AuthModule,
     TasksModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

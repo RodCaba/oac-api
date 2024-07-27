@@ -16,7 +16,7 @@ export class User {
   @Prop({ unique: true, required: true, index: true })
   email: string;
 
-  @Prop({ required: true, select: false })
+  @Prop({ select: false })
   password: string;
 
   @Prop({ default: Date.now })
@@ -27,6 +27,9 @@ export class User {
 
   @Prop({ type: [String], default: [Roles.USER] })
   roles: string[];
+
+  @Prop({ default: null, select: false })
+  signupToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

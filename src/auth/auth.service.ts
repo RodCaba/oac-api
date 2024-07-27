@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { SignupResponseDto } from 'src/auth/dto/signup.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateAdminDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { Roles } from './enums/roles';
 
@@ -15,7 +15,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(payload: CreateUserDto): Promise<SignupResponseDto | null> {
+  async signUp(payload: CreateAdminDto): Promise<SignupResponseDto | null> {
     const hashedPassword = await bcrypt.hash(payload.password, this.saltRounds);
     const data = { ...payload, password: hashedPassword, roles: [Roles.ADMIN] };
     const user = await this.usersService.create(data);
@@ -34,7 +34,7 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findByEmailIncludePass(email);
 
-    if (!user) return null;
+    if (!user || !user.password) return null;
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 

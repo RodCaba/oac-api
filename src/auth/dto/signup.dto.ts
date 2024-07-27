@@ -7,3 +7,14 @@ export class SignupResponseDto {
     email: string;
   };
 }
+
+export class SignupUserResponseDto {
+  success: boolean;
+  message: string;
+  data: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    signupToken: string;
+  };
+}

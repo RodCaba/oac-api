@@ -13,6 +13,7 @@ RBAC_POLICY
     .createAny('tasks')
     .readAny('tasks')
     .updateOwn('tasks')
+    .createAny('users')
   .grant(Roles.ADMIN)
     .extend(Roles.MANAGER)
     .createAny('projects')
